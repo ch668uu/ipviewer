@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>IPViewer</title>
+    <link rel="icon" href="icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="icon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(90deg, #cf7611, #6e0dff, #18cb66, #ff0008);
+            backdrop-filter: blur(100px);
+            background-size: 400% 100%; 
+            animation: rainbowMove 0.5s linear infinite;          
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            
+
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            padding: 40px 24px 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 32px;
+        }
+
+        .header .logo {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        /* Carousel */
+        .carousel-wrapper {
+            width: 100%;
+            overflow: hidden;
+            border-radius: 5px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 28px;
+            background: #fff;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.6s ease;
+        }
+
+        .carousel-track img {
+            width: 100%;
+            flex-shrink: 0;
+            display: block;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 0 18px;
+        }
+
+        .carousel-dots .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ccc;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .carousel-dots .dot.active {
+            background: #26572b;
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        /* Description */
+        .description {
+            text-align: center;
+            font-size: 16px;
+            line-height: 1.7;
+            color: #555;
+            margin-bottom: 36px;
+            padding: 0 4px;
+        }
+
+        .description strong {
+            color: #222;
+        }
+
+        /* Download button */
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #242f3a;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 600;
+            padding: 14px 40px;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 14px rgba(222, 11, 11, 0.3);
+        }
+
+        .download-btn:hover {
+            background: #111820;
+        }
+
+        .download-btn:active {
+            transform: scale(0.97);
+        }
+
+        .download-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 48px;
+            font-size: 13px;
+            color: #999;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <img class="logo" src="icon.png" alt="IPViewer">
+            <h1>IPViewer</h1>
+        </div>
+
+        <!-- Carousel -->
+        <div class="carousel-wrapper">
+            <div class="carousel-track" id="carouselTrack">
+                <img src="Picture1.jpg" alt="宣传图 1">
+                <img src="Picture2.jpg" alt="宣传图 2">
+                <img src="Picture3.jpg" alt="宣传图 3">
+            </div>
+            <div class="carousel-dots" id="carouselDots">
+                <button class="dot active" data-index="0"></button>
+                <button class="dot" data-index="1"></button>
+                <button class="dot" data-index="2"></button>
+            </div>
+        </div>
+
+        <!-- Description -->
+        <p class="description" style="color: #1abb2a;">
+            <strong>IPViewer</strong> 是一款快捷查看手机<strong>IP</strong>的软件。<br>
+            点击下方按钮下载
+        </p>
+
+        <!-- Download button -->
+        <a class="download-btn" href="ipviewer.apk" download>
+            <img width="22" height="22" src="download.png"alt="IPViewer">
+            下载 IPViewer
+        </a>
+
+        <div class="footer">
+            诶!云朵,哒哒哒哒哒，好想玩...
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const track = document.getElementById('carouselTrack');
+            const dots = document.querySelectorAll('.dot');
+            const total = dots.length;
+            let current = 0;
+            let interval;
+
+            function goTo(index) {
+                if (index < 0) index = total - 1;
+                if (index >= total) index = 0;
+                track.style.transform = 'translateX(' + (-index * 100) + '%)';
+                dots.forEach(function(d, i) {
+                    d.classList.toggle('active', i === index);
+                });
+                current = index;
+            }
+
+            function startAuto() {
+                interval = setInterval(function() {
+                    goTo(current + 1);
+                }, 3000);
+            }
+
+            function stopAuto() {
+                clearInterval(interval);
+            }
+
+            dots.forEach(function(dot) {
+                dot.addEventListener('click', function() {
+                    stopAuto();
+                    goTo(parseInt(this.dataset.index));
+                    startAuto();
+                });
+            });
+
+            // Touch support
+            var startX = 0;
+            var isDragging = false;
+
+            track.addEventListener('touchstart', function(e) {
+                startX = e.touches[0].clientX;
+                isDragging = true;
+                stopAuto();
+            }, { passive: true });
+
+            track.addEventListener('touchend', function(e) {
+                if (!isDragging) return;
+                isDragging = false;
+                var diff = startX - e.changedTouches[0].clientX;
+                if (Math.abs(diff) > 40) {
+                    goTo(current + (diff > 0 ? 1 : -1));
+                }
+                startAuto();
+            }, { passive: true });
+
+            // Mouse drag support
+            track.addEventListener('mousedown', function(e) {
+                startX = e.clientX;
+                isDragging = true;
+                stopAuto();
+            });
+
+            track.addEventListener('mouseup', function(e) {
+                if (!isDragging) return;
+                isDragging = false;
+                var diff = startX - e.clientX;
+                if (Math.abs(diff) > 40) {
+                    goTo(current + (diff > 0 ? 1 : -1));
+                }
+                startAuto();
+            });
+
+            track.addEventListener('mouseleave', function() {
+                if (isDragging) {
+                    isDragging = false;
+                    startAuto();
+                }
+            });
+
+            // Prevent default drag on images
+            track.querySelectorAll('img').forEach(function(img) {
+                img.addEventListener('dragstart', function(e) {
+                    e.preventDefault();
+                });
+            });
+
+            startAuto();
+        })();
+    </script>
+</body>
+</html>
